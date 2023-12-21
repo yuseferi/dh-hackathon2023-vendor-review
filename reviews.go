@@ -22,12 +22,10 @@ type ReviewResponseItem struct {
 }
 
 type ReviewsResponse struct {
-	HasPrevious   bool                 `json:"hasPrevious"`
-	HasNext       bool                 `json:"hasNext"`
-	Reviews       []ReviewResponseItem `json:"reviews"`
-	ReviewsDigest struct {
-		Tags []string `json:"tags"`
-	} `json:"reviewsDigest"`
+	HasPrevious   bool                  `json:"hasPrevious"`
+	HasNext       bool                  `json:"hasNext"`
+	Reviews       []ReviewResponseItem  `json:"reviews"`
+	ReviewsDigest openAISummaryResponse `json:"reviewsDigest"`
 }
 
 type SummaryReview struct {
@@ -91,7 +89,7 @@ func getReviewsStatement(limit int) []string {
 		if i == 0 {
 			continue
 		}
-		record := fmt.Sprintf("Date:%s| Review: %s , Rating:%s", item[2], item[0], item[1])
+		record := fmt.Sprintf("Date:%s| Review: %s| Rating:%s", item[2], item[0], item[1])
 		reviewsSlc = append(reviewsSlc, record)
 	}
 	return reviewsSlc

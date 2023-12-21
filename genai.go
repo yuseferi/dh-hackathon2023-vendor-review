@@ -29,8 +29,9 @@ type openAISummaryResponse struct {
 }
 
 type openAIReplyResponse struct {
-	ID             string `json:"ID"`
-	SuggestedReply string `json:"SuggestedReply"`
+	ID             string   `json:"ID"`
+	Tags           []string `json:"tags"`
+	SuggestedReply string   `json:"SuggestedReply"`
 }
 
 func (c GenAI) getOverAllSummary(ctx context.Context, reviews []string) (res openAISummaryResponse, err error) {
@@ -80,11 +81,11 @@ func (c GenAI) getOverAllSummary(ctx context.Context, reviews []string) (res ope
 	return
 }
 
-func (c GenAI) getReviewsWithSmartReplies(ctx context.Context, reviews []string, sampleReplies []string) (res []openAIReplyResponse, err error) {
-	systemPrompt := "based on given sample replies generate some good respectful replies for users reviews of a restaurant, response should be in a well-formed valid json format array"
-	summaryPrompt := "first I add the reviews and sample replies. in the next message  I will provide a list of reviews that I need your reply suggestion for them, please return response in json format with keys, ID, suggestedReply"
-	msg1 := summaryPrompt + "sample data: \n\n" + strings.Join(sampleReplies, "\n")
-	msg2 := "and the data that I would like you generate suggested replies are  data: " + strings.Join(reviews, "\n")
+func (c GenAI) getReviewsWithSmartRepliesWithTags(ctx context.Context, reviews []string, sampleReplies []string) (res []openAIReplyResponse, err error) {
+	systemPrompt := "based on given sample replies generate some good respectful replies for users reviews of a restaurant, Also based on the reviews generate tags for each review. response should be in a well-formed valid json format array"
+	summaryPrompt := "As a Restaurant Owner operating with an Online Food Delivery Platform, I received some reviews and ratings from my customers. Analyse theReview Text - Rating data set below based on Topic Modelling and identify the Top Tags.first I add the reviews and sample replies.\n\n\n In the next message  I will provide a list of reviews that I need your reply suggestion for them, please return response in json format with keys, ID, tags, suggestedReply"
+	msg1 := summaryPrompt + "sample data for modeling the replies pattern: \n\n" + strings.Join(sampleReplies, "\n")
+	msg2 := "and the data that I would like you generate suggested replies and tags are: " + strings.Join(reviews, "\n")
 	req := openai.ChatCompletionRequest{
 		Model: openai.GPT4,
 		//ResponseFormat: &openai.ChatCompletionResponseFormat{Type: openai.ChatCompletionResponseFormatTypeJSONObject},
