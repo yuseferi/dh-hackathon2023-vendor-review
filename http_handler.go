@@ -54,7 +54,7 @@ func GetReviews(w http.ResponseWriter, r *http.Request) {
 			Reviews:       reviews,
 			ReviewsDigest: summary,
 		}
-		cache.Set(cacheKey, response, time.Minute*50)
+		cache.Set(cacheKey, response, time.Hour*10)
 	} else {
 		response = cachedReviews.(ReviewsResponse)
 	}

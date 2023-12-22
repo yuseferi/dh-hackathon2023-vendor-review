@@ -6,6 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-gota/gota v0.12.0
 	github.com/go-playground/validator/v10 v10.14.0
+	github.com/rs/cors v1.10.1
 	github.com/sashabaranov/go-openai v1.17.9
 	github.com/yuseferi/gocache v1.0.1
 	go.uber.org/zap v1.22.0
